@@ -16,8 +16,11 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"flag"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"net/url"
 	"os"
 
 	"github.com/open-telemetry/opentelemetry-lambda/collector/lambdalifecycle"
@@ -25,6 +28,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/open-telemetry/opentelemetry-lambda/collector/internal/lifecycle"
 )
 
@@ -46,6 +50,40 @@ func main() {
 
 	logger := initLogger()
 	logger.Info("Launching OpenTelemetry Lambda extension", zap.String("version", Version))
+
+	user := os.Getenv("OTEL_EXTENSION_USERNAME")
+	password_secret := os.Getenv("OTEL_EXTENSION_PASSWORD_SECRET")
+	if user != "" && password_secret != "" {
+		ctx := context.Background()
+		logger.Info("Fetching OTEL_EXTENSION_PASSWORD_SECRET", zap.String("path", password_secret))
+		cfg, err := config.LoadDefaultConfig(ctx)
+		if err != nil {
+			logger.Error("Unable to load AWS config", zap.Error(err))
+			os.Exit(1)
+		}
+		client := secretsmanager.NewFromConfig(cfg)
+		result, err := client.GetSecretValue(ctx, &secretsmanager.GetSecretValueInput{
+			SecretId: &password_secret,
+		})
+
+		if err != nil {
+			logger.Error("Unable to fetch password secret", zap.Error(err))
+			os.Exit(1)
+		}
+
+		auth_header := fmt.Sprintf("Authorization=Basic %s", base64.URLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", user, result.SecretString))))
+		headers := os.Getenv("OTEL_EXPORTER_OTLP_HEADERS")
+		if headers == "" {
+			headers = url.QueryEscape(auth_header)
+		} else {
+			headers = fmt.Sprintf("%s,%s", headers, url.QueryEscape(auth_header))
+		}
+		err = os.Setenv("OTEL_EXPORTER_OTLP_HEADERS", headers)
+		if err != nil {
+			logger.Error("Unable to set OTEL_EXPORTER_OTLP_HEADERS", zap.Error(err))
+			os.Exit(1)
+		}
+	}
 
 	ctx, lm := lifecycle.NewManager(context.Background(), logger, Version)
 
