@@ -19,6 +19,7 @@ replace github.com/open-telemetry/opentelemetry-lambda/collector/receiver/teleme
 replace cloud.google.com/go => cloud.google.com/go v0.107.0
 
 require (
+	github.com/aws/aws-sdk-go v1.54.19
 	github.com/golang-collections/go-datastructures v0.0.0-20150211160725-59788d5eb259
 	github.com/google/go-cmp v0.6.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/confmap/provider/s3provider v0.119.0
@@ -43,7 +44,7 @@ require (
 	github.com/alecthomas/participle/v2 v2.1.1 // indirect
 	github.com/antchfx/xmlquery v1.4.3 // indirect
 	github.com/antchfx/xpath v1.3.3 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.36.1 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.36.3 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.8 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.29.6 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.59 // indirect
@@ -89,6 +90,7 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
