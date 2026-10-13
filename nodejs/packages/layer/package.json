@@ -65,7 +65,7 @@
     "@opentelemetry/instrumentation-mongodb": "^0.68.0",
     "@opentelemetry/instrumentation-mongoose": "^0.61.0",
     "@opentelemetry/instrumentation-mysql": "^0.61.0",
-    "@opentelemetry/instrumentation-mysql2": "^0.61.0",
+    "@opentelemetry/instrumentation-mysql2": "^0.69.0",
     "@opentelemetry/instrumentation-nestjs-core": "^0.61.0",
     "@opentelemetry/instrumentation-net": "^0.59.0",
     "@opentelemetry/instrumentation-pg": "^0.67.0",
