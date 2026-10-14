@@ -71,7 +71,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		auth_header := fmt.Sprintf("Authorization=Basic %s", base64.URLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", user, result.SecretString))))
+		auth_header := fmt.Sprintf("Authorization=Basic %s", base64.URLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", user, *result.SecretString))))
 		headers := os.Getenv("OTEL_EXPORTER_OTLP_HEADERS")
 		if headers == "" {
 			headers = url.QueryEscape(auth_header)
